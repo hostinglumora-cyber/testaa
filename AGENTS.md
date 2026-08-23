@@ -1,36 +1,70 @@
-const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
-
 # AGENTS.md
 
 ## Project Context
 
-This is a Base44 app repository. Treat it as user-owned application code, keep changes focused on the user's request, and preserve existing project conventions.
+This is a Base44 app repository ("Siren" — an ER:LC asset marketplace). It is a
+React 18 + Vite 6 frontend that talks to a Base44 backend at runtime. Treat it
+as user-owned application code; keep changes focused on the user's request and
+preserve existing project conventions.
 
-Start with `README.md` for local setup, environment variables, and publish workflow.
+## Important: this repo was a flattened export
 
-## Base44 References
+The original `src/` tree was exported flattened to the repo root and would not
+build. The directory structure has been reconstructed:
 
-- CLI overview: https://docs.db.com/developers/references/cli/get-started/overview.md
-- Agent skills: https://docs.db.com/developers/backend/overview/skills.md
+- `src/main.jsx`, `src/App.jsx`, `src/index.css` — app entry
+- `src/pages/*.jsx` — route pages
+- `src/components/*.jsx` — app components
+- `src/components/ui/*.jsx` — shadcn/ui primitives
+- `src/lib/*.js(x)` — `utils.js` (`cn`), `AuthContext`, `app-params`, `query-client`, etc.
+- `src/api/base44Client.js` — SDK client stub
+- `src/hooks/*.js` — `use-mobile`, `use-size`
 
-If your agent supports Agent Skills, install or update Base44 skills before Base44-specific work:
+A few standard shadcn files were missing from the export and were recreated:
+`src/lib/utils.js`, `src/components/ui/toaster.jsx`, `src/components/ui/tooltip.jsx`,
+`src/components/ui/use-toast.js`, `src/hooks/use-mobile.js`, `src/hooks/use-size.js`,
+and `src/components/UserNotRegisteredError.jsx`.
+
+`vite.config.js` was also missing its `import base44 from '@base44/vite-plugin'`
+line, the `@` → `./src` alias, and dev-server host config — all added.
+
+## Running locally (Base44 dev environment)
 
 ```bash
-npx skills add base44/skills
+docker compose -f docker-compose.base44.yml up -d
 ```
 
-## Key Files
+This runs `node:22-bookworm-slim`, bind-mounts the repo, runs `npm install` then
+`npm run dev` (Vite) on host port 3000 with live reload (file-watch polling
+enabled for the bind mount). Logs: `docker compose -f docker-compose.base44.yml logs -f web`.
 
-- `src/`: frontend application source.
-- `src/api/base44Client.js`: frontend Base44 SDK client.
-- `vite.config.js`: Vite config and Base44 Vite plugin setup.
-- `.env.local`: local-only environment values; never commit secrets.
+## Backend / credentials
 
-## Working Notes
+The app is designed to run against a Base44 backend. Each file that uses `db`
+has an inlined fallback stub (`globalThis.__B44_DB__ || {...}`) that returns
+empty data and an unauthenticated user, so the **public pages (Home,
+Marketplace, login, etc.) render without any backend or credentials**. That is
+how the preview runs today.
 
-- Use `base44 dev` as the default local development command when you need the local Base44 backend. It can run the backend and frontend together.
-- When docs or code mention the frontend being started automatically, that usually means the Base44 project config includes `site.serveCommand`, for example `"serveCommand": "npm run dev"` in `base44/config.jsonc`.
-- Use `npm run dev` only for frontend-only work against the hosted Base44 backend.
-- Prefer the existing Base44 CLI workflow over adding new npm scripts for Base44-specific tasks.
-- Reuse the existing SDK client and Vite plugin patterns before adding new Base44 integration paths.
-- Run the relevant checks from `package.json` before finishing code changes.
+For full functionality (real listings, auth, purchases) the frontend needs the
+hosted Base44 backend, configured via Vite env vars:
+- `VITE_BASE44_APP_ID`
+- `VITE_BASE44_APP_BASE_URL`
+
+When unset, the `@base44/vite-plugin` logs "Proxy not enabled" and the app runs
+on the offline stubs. To wire a real backend, provide those vars (e.g. via the
+Base44 dashboard / `base44 dev`, or a `.env.local`).
+
+No external-service secrets are required to boot.
+
+## Verifying it works
+
+- `curl -sf -H "Host: 3000-<preview-suffix>" http://localhost:3000/` returns the app HTML.
+- `/src/main.jsx` is served as transformed dev source (live, not a prebuilt bundle).
+- The landing page (`/`) renders the Siren hero and (empty) listings grid.
+
+## Checks
+
+- `npm run lint` / `npm run lint:fix`
+- `npm run typecheck` (jsconfig-based)
+- `npm run build`

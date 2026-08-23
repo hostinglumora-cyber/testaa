@@ -1,0 +1,19 @@
+# Base44 dev environment for the Siren ER:LC Marketplace frontend.
+# Runs the Vite dev server from the cloned source (live reload) on host port 3000.
+# No backend is required to render the public pages — the app falls back to an
+# inlined offline `db` stub when the Base44 backend is unavailable.
+services:
+  web:
+    image: node:22-bookworm-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+      # keep installed deps in an anonymous volume so the bind mount doesn't shadow them
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      # reliable file watching inside the bind mount
+      - CHOKIDAR_USEPOLLING=true
+    command: sh -c "npm install --no-audit --no-fund && npm run dev"
+    tty: true
