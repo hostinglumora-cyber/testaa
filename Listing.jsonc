@@ -1,0 +1,159 @@
+{
+  "name": "Listing",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title"
+    },
+    "headline": {
+      "type": "string",
+      "title": "Headline",
+      "default": ""
+    },
+    "description": {
+      "type": "string",
+      "title": "Description"
+    },
+    "listing_type": {
+      "type": "string",
+      "title": "Listing Type",
+      "enum": [
+        "Single",
+        "Bundle",
+        "Free",
+        "Code"
+      ],
+      "default": "Single"
+    },
+    "category": {
+      "type": "string",
+      "title": "Category",
+      "enum": [
+        "Liveries",
+        "Uniforms",
+        "ELS",
+        "Map Templates",
+        "Bundles",
+        "Other Assets"
+      ],
+      "default": "Liveries"
+    },
+    "departments": {
+      "type": "array",
+      "title": "Department Tags",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Sheriff",
+          "Police",
+          "DOT",
+          "Fire",
+          "ERLC"
+        ]
+      },
+      "default": []
+    },
+    "images": {
+      "type": "array",
+      "title": "Images",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "maxItems": 10
+    },
+    "codes": {
+      "type": "array",
+      "title": "Codes",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "bundle_items": {
+      "type": "array",
+      "title": "Bundle Items",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "price_type": {
+      "type": "string",
+      "title": "Price Type",
+      "enum": [
+        "Robux",
+        "Free"
+      ],
+      "default": "Free"
+    },
+    "price": {
+      "type": "number",
+      "title": "Price",
+      "default": 0
+    },
+    "currency": {
+      "type": "string",
+      "title": "Currency",
+      "default": "ROBUX"
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "active",
+        "sold",
+        "draft",
+        "removed"
+      ],
+      "default": "active"
+    },
+    "seller_id": {
+      "type": "string",
+      "title": "Seller ID"
+    },
+    "seller_name": {
+      "type": "string",
+      "title": "Seller Name"
+    },
+    "featured": {
+      "type": "boolean",
+      "title": "Featured",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "category",
+    "price_type"
+  ],
+  "rls": {
+    "create": true,
+    "read": true,
+    "update": {
+      "$or": [
+        {
+          "data.seller_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.seller_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

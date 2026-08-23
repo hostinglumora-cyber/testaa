@@ -1,0 +1,61 @@
+{
+  "name": "Review",
+  "type": "object",
+  "properties": {
+    "listing_id": {
+      "type": "string",
+      "title": "Listing ID"
+    },
+    "reviewer_id": {
+      "type": "string",
+      "title": "Reviewer ID"
+    },
+    "reviewer_name": {
+      "type": "string",
+      "title": "Reviewer Name"
+    },
+    "rating": {
+      "type": "integer",
+      "title": "Rating",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 5
+    },
+    "comment": {
+      "type": "string",
+      "title": "Comment",
+      "default": ""
+    },
+    "seller_response": {
+      "type": "string",
+      "title": "Seller Response",
+      "default": ""
+    }
+  },
+  "required": [
+    "listing_id",
+    "reviewer_id",
+    "rating"
+  ],
+  "rls": {
+    "create": true,
+    "read": true,
+    "update": {
+      "$or": [
+        {
+          "data.reviewer_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
