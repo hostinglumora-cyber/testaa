@@ -33,10 +33,11 @@ export default function Dashboard() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Welcome back, {user?.display_name || user?.full_name?.split(" ")[0] || "Member"}</h1>
+          <p className="label-mono text-primary mb-1.5">Overview</p>
+          <h1 className="font-display text-2xl font-bold text-foreground">Welcome back, {user?.display_name || user?.full_name?.split(" ")[0] || "Member"}</h1>
           <p className="text-muted-foreground text-sm mt-1">Here's what's happening with your store.</p>
         </div>
-        <Link to="/sell" className="inline-flex items-center gap-1.5 bg-primary hover:opacity-90 text-primary-foreground font-semibold px-4 py-2.5 rounded-lg text-sm">
+        <Link to="/sell" className="inline-flex items-center gap-1.5 bg-primary hover:opacity-90 text-primary-foreground font-semibold px-4 py-2.5 rounded-lg text-sm glow-primary">
           <Plus className="w-4 h-4" /> New listing
         </Link>
       </div>
@@ -51,7 +52,7 @@ export default function Dashboard() {
       {/* Listings table */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-semibold text-foreground">Your listings</h2>
+          <h2 className="font-display font-semibold text-foreground">Your listings</h2>
           <Link to="/u/me" className="text-sm text-primary hover:opacity-70 inline-flex items-center gap-1">View profile <ArrowRight className="w-3.5 h-3.5" /></Link>
         </div>
         {loading ? (
@@ -67,8 +68,8 @@ export default function Dashboard() {
         ) : (
           <div className="divide-y divide-border">
             {listings.map((l) => (
-              <div key={l.id} className="flex items-center gap-4 px-5 py-3 hover:bg-secondary/30">
-                <div className="w-12 h-12 rounded-lg overflow-hidden bg-secondary shrink-0">
+              <div key={l.id} className="flex items-center gap-4 px-5 py-3 hover:bg-secondary/30 transition">
+                <div className="w-12 h-12 rounded-lg overflow-hidden bg-secondary shrink-0 ring-1 ring-border">
                   {l.images?.[0] ? <Image src={l.images[0]} fittingType="fill" className="w-full h-full" /> : <div className="w-full h-full grid place-items-center text-muted-foreground/30"><Store className="w-5 h-5" /></div>}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -86,7 +87,7 @@ export default function Dashboard() {
       {/* Incoming orders */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-semibold text-foreground flex items-center gap-2"><ShoppingBag className="w-5 h-5 text-primary" /> Incoming orders</h2>
+          <h2 className="font-display font-semibold text-foreground flex items-center gap-2"><ShoppingBag className="w-5 h-5 text-primary" /> Incoming orders</h2>
           {pendingOrders.length > 0 && <span className="text-xs bg-amber-500/15 text-amber-400 px-2 py-1 rounded">{pendingOrders.length} pending</span>}
         </div>
         {orders.length === 0 ? (
@@ -115,10 +116,11 @@ export default function Dashboard() {
 
 function StatCard({ icon: Icon, label, value }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
-      <div className="w-9 h-9 rounded-lg bg-primary/10 grid place-items-center mb-3"><Icon className="w-5 h-5 text-primary" /></div>
-      <div className="text-2xl font-bold text-foreground">{value}</div>
-      <div className="text-xs text-muted-foreground mt-0.5">{label}</div>
+    <div className="relative rounded-xl border border-border bg-card p-5 overflow-hidden hover:border-primary/30 transition">
+      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
+      <div className="relative w-9 h-9 rounded-lg bg-primary/10 grid place-items-center mb-3 ring-1 ring-primary/20"><Icon className="w-5 h-5 text-primary" /></div>
+      <div className="relative font-display text-2xl font-bold text-foreground">{value}</div>
+      <div className="label-mono relative mt-0.5">{label}</div>
     </div>
   );
 }

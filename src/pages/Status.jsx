@@ -21,9 +21,10 @@ const UPTIME_DAYS = 90;
 export default function Status() {
   const allOperational = SERVICES.every((s) => s.status === "operational");
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] grid-bg opacity-40" />
       <SiteNav />
-      <div className="max-w-3xl mx-auto px-5 lg:px-8 py-12">
+      <div className="relative max-w-3xl mx-auto px-5 lg:px-8 py-12">
         <div className="text-center mb-12">
           <div className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full mb-5 ${allOperational ? "bg-primary/10 border border-primary/20" : "bg-amber-500/10 border border-amber-500/20"}`}>
             <span className={`w-2.5 h-2.5 rounded-full ${allOperational ? "bg-primary" : "bg-amber-400"} animate-pulse`} />
@@ -31,8 +32,8 @@ export default function Status() {
               {allOperational ? "All systems operational" : "Partial outage"}
             </span>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2">System Status</h1>
-          <p className="text-muted-foreground">Real-time status of Siren services.</p>
+          <h1 className="font-display text-4xl font-bold tracking-tight mb-2 text-glow">System Status</h1>
+          <p className="text-muted-foreground">Real-time status of Liberty Market services.</p>
         </div>
 
         <div className="space-y-3 mb-12">
@@ -53,7 +54,7 @@ export default function Status() {
 
         <div className="rounded-xl border border-border bg-card p-6 mb-12">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold">90-day uptime</h2>
+            <h2 className="font-display font-semibold">90-day uptime</h2>
             <span className="text-sm text-primary">99.97% uptime</span>
           </div>
           <div className="flex gap-0.5">
@@ -67,7 +68,7 @@ export default function Status() {
         </div>
 
         <div>
-          <h2 className="font-semibold mb-4 flex items-center gap-2"><Activity className="w-5 h-5 text-primary" /> Past incidents</h2>
+          <h2 className="font-display font-semibold mb-4 flex items-center gap-2"><Activity className="w-5 h-5 text-primary" /> Past incidents</h2>
           <div className="space-y-3">
             {INCIDENTS.map((inc, i) => (
               <div key={i} className="rounded-xl border border-border bg-card p-4 flex items-start gap-3">

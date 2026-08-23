@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, ChevronDown, Store, Gauge, FileText, ShieldCheck, ArrowRight } from "lucide-react";
+import { Menu, X, Store, Gauge, FileText, ArrowRight } from "lucide-react";
 import Logo from "@/components/Logo";
 
 export default function SiteNav() {
@@ -9,10 +9,9 @@ export default function SiteNav() {
     { label: "Marketplace", to: "/marketplace", icon: Store },
     { label: "Status", to: "/status", icon: Gauge },
     { label: "Docs", to: "/docs", icon: FileText },
-    { label: "Admin", to: "/admin", icon: ShieldCheck },
   ];
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border">
+    <header className="sticky top-0 z-50 glass border-b border-border">
       <div className="max-w-7xl mx-auto px-5 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/" className="shrink-0"><Logo size={30} textClass="text-lg" /></Link>
         <nav className="hidden md:flex items-center gap-1">

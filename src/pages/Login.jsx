@@ -1,134 +1,65 @@
 const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
-import AuthLayout from "@/components/AuthLayout";
-import GoogleIcon from "@/components/GoogleIcon";
+import { ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { BRAND } from "@/lib/brand";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  // Post-login destination (e.g. the MCP OAuth consent page sends users here
-  // with returnTo so the grant flow can resume). Same-origin paths only.
+  const [redirecting, setRedirecting] = useState(false);
   const returnTo = safeReturnTo();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      await db.auth.loginViaEmailPassword(email, password);
-      window.location.href = returnTo;
-    } catch (err) {
-      setError(err.message || "Invalid email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogle = () => {
-    db.auth.loginWithProvider("google", returnTo);
+  const handleSignIn = () => {
+    setRedirecting(true);
+    db.auth.redirectToLogin(returnTo);
   };
 
   return (
-    <AuthLayout
-      icon={LogIn}
-      title="Welcome back"
-      subtitle="Log in to your account"
-      footer={
-        <>
-          Don't have an account?{" "}
-          <Link
-            to={"/register" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "")}
-            className="text-primary font-medium hover:underline"
-          >
-            Create one
-          </Link>
-        </>
-      }
-    >
-      <Button
-        variant="outline"
-        className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleGoogle}
-      >
-        <GoogleIcon className="w-5 h-5 mr-2" />
-        Continue with Google
-      </Button>
+    <div className="relative min-h-screen flex items-center justify-center bg-background px-4 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-60" />
+      <div className="pointer-events-none absolute -top-1/4 left-1/2 -translate-x-1/2 w-[680px] h-[680px] rounded-full bg-primary/10 blur-[150px]" />
 
-      <div className="relative mb-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
+      <div className="relative w-full max-w-md text-center">
+        <div className="inline-flex flex-col items-center">
+          <img
+            src="https://media.base44.com/images/public/6a8ac9d8de32e5eaaaddbfe8/14bd5696a_image.png"
+            alt={`${BRAND.name} logo`}
+            width={64}
+            height={64}
+            className="rounded-full mb-7"
+            style={{ boxShadow: "0 0 0 1px hsl(var(--primary)/0.3), 0 0 36px -6px hsl(var(--primary)/0.6)" }}
+          />
         </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-3 text-muted-foreground">or</span>
-        </div>
-      </div>
+        <p className="label-mono text-primary mb-3">Secure access</p>
+        <h1 className="font-display text-4xl font-bold tracking-tight text-glow">
+          Sign in to {BRAND.name}
+        </h1>
+        <p className="text-muted-foreground mt-3 mb-9 leading-relaxed max-w-sm mx-auto">
+          Continue to your account through our secure platform sign-in. Your marketplace data, listings, and orders are waiting.
+        </p>
 
-      {error && (
-        <div className="mb-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              autoFocus
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="pl-10 h-12"
-              required
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-              Forgot password?
-            </Link>
-          </div>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pl-10 h-12"
-              required
-            />
-          </div>
-        </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
-          {loading ? (
+        <button
+          onClick={handleSignIn}
+          disabled={redirecting}
+          className="group w-full inline-flex items-center justify-center gap-2 bg-primary hover:opacity-90 text-primary-foreground font-semibold px-6 py-3.5 rounded-xl transition text-base glow-primary disabled:opacity-70"
+        >
+          {redirecting ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Logging in...
+              <Loader2 className="w-4 h-4 animate-spin" /> Redirecting…
             </>
           ) : (
-            "Log in"
+            <>
+              Continue to sign in
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
+            </>
           )}
-        </Button>
-      </form>
-    </AuthLayout>
+        </button>
+
+        <div className="flex items-center justify-center gap-2 mt-8 text-xs text-muted-foreground">
+          <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+          Scam-protected · Verified sellers · Instant delivery
+        </div>
+      </div>
+    </div>
   );
 }

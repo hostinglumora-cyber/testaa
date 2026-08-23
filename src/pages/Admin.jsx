@@ -34,7 +34,7 @@ export default function Admin() {
       <div className="min-h-screen bg-background text-foreground grid place-items-center px-5">
         <div className="text-center max-w-sm">
           <AlertTriangle className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-          <h1 className="text-xl font-bold mb-2">Admins only</h1>
+          <h1 className="font-display text-xl font-bold mb-2">Admins only</h1>
           <p className="text-muted-foreground text-sm">You don't have access to this panel.</p>
         </div>
       </div>
@@ -57,9 +57,10 @@ export default function Admin() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-primary/15 grid place-items-center"><ShieldCheck className="w-5 h-5 text-primary" /></div>
+        <div className="w-10 h-10 rounded-xl bg-primary/15 grid place-items-center ring-1 ring-primary/25"><ShieldCheck className="w-5 h-5 text-primary" /></div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Admin Panel</h1>
+          <p className="label-mono text-primary mb-0.5">Control</p>
+          <h1 className="font-display text-2xl font-bold text-foreground">Admin Panel</h1>
           <p className="text-muted-foreground text-sm">Manage users, listings, and enforce marketplace rules.</p>
         </div>
       </div>
@@ -72,7 +73,7 @@ export default function Admin() {
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <div className="px-5 py-4 border-b border-border flex items-center justify-between gap-3">
-          <h2 className="font-semibold text-foreground">Members</h2>
+          <h2 className="font-display font-semibold text-foreground">Members</h2>
           <div className="relative w-56">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search…" className="w-full bg-secondary border border-border rounded-lg pl-9 pr-3 py-1.5 text-sm focus:outline-none focus:border-primary/50" />
@@ -105,7 +106,7 @@ export default function Admin() {
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
-        <div className="px-5 py-4 border-b border-border"><h2 className="font-semibold text-foreground">Listings</h2></div>
+        <div className="px-5 py-4 border-b border-border"><h2 className="font-display font-semibold text-foreground">Listings</h2></div>
         <div className="divide-y divide-border">
           {listings.map((l) => (
             <div key={l.id} className="px-5 py-3 flex items-center gap-3">
@@ -126,10 +127,11 @@ export default function Admin() {
 
 function MiniStat({ icon: Icon, label, value }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5">
-      <Icon className="w-5 h-5 text-primary mb-3" />
-      <div className="text-2xl font-bold text-foreground">{value}</div>
-      <div className="text-xs text-muted-foreground">{label}</div>
+    <div className="relative rounded-xl border border-border bg-card p-5 overflow-hidden hover:border-primary/30 transition">
+      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-primary/10 blur-2xl pointer-events-none" />
+      <Icon className="relative w-5 h-5 text-primary mb-3" />
+      <div className="relative font-display text-2xl font-bold text-foreground">{value}</div>
+      <div className="label-mono relative mt-0.5">{label}</div>
     </div>
   );
 }

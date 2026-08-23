@@ -3,7 +3,7 @@ import DocsLayout from "@/components/DocsLayout";
 
 export default function Privacy() {
   return (
-    <DocsLayout title="Privacy Policy" description="Last updated August 23, 2026. How Siren handles your data.">
+    <DocsLayout title="Privacy Policy" description="Last updated August 23, 2026. How Liberty Market handles your data.">
       <Block title="1. Data we collect">
         <p>We collect your email, display name, and profile information when you create an account. Listing data (titles, descriptions, images, codes) is stored to power the marketplace.</p>
       </Block>

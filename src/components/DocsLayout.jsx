@@ -46,12 +46,13 @@ export default function DocsLayout({ children, title, description, toc }) {
     : NAV;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-border">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] grid-bg opacity-40" />
+      <header className="sticky top-0 z-40 glass border-b border-border">
         <div className="max-w-6xl mx-auto px-5 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <Logo size={28} textClass="text-base" />
-            <span className="text-muted-foreground/40 text-sm font-normal">/ Docs</span>
+            <span className="text-muted-foreground/40 text-sm font-normal font-mono">/ docs</span>
           </Link>
           <div className="relative w-64 hidden sm:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
@@ -60,7 +61,7 @@ export default function DocsLayout({ children, title, description, toc }) {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-10 grid lg:grid-cols-[220px_minmax(0,1fr)_200px] gap-10">
+      <div className="relative max-w-6xl mx-auto px-5 lg:px-8 py-10 grid lg:grid-cols-[220px_minmax(0,1fr)_200px] gap-10">
         {/* Sidebar */}
         <aside className="lg:sticky lg:top-24 h-fit hidden lg:block">
           <div className="flex items-center gap-2 mb-4 px-2">
@@ -70,12 +71,12 @@ export default function DocsLayout({ children, title, description, toc }) {
           <nav className="space-y-5">
             {filteredNav.map((sec) => (
               <div key={sec.group}>
-                <p className="px-2 mb-1.5 text-xs uppercase tracking-widest text-muted-foreground/50 font-semibold">{sec.group}</p>
+                <p className="label-mono mb-1.5 px-2">{sec.group}</p>
                 <div className="space-y-0.5">
                   {sec.items.map((it, i) => {
                     const active = location.pathname === it.to && it.label !== "Introduction";
                     return (
-                      <Link key={it.label + i} to={it.to} className={`block px-3 py-1.5 rounded-lg text-sm transition ${active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}>
+                      <Link key={it.label + i} to={it.to} className={`block px-3 py-1.5 rounded-lg text-sm transition ${active ? "bg-primary/10 text-primary border-l-2 border-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary border-l-2 border-transparent"}`}>
                         {it.label}
                       </Link>
                     );
@@ -89,23 +90,23 @@ export default function DocsLayout({ children, title, description, toc }) {
         {/* Content */}
         <article className="max-w-2xl">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-1.5 text-sm text-muted-foreground/50 mb-4">
-            <Link to="/" className="hover:text-foreground">Home</Link>
+          <nav className="flex items-center gap-1.5 text-sm text-muted-foreground/50 mb-4 font-mono">
+            <Link to="/" className="hover:text-foreground">~</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-muted-foreground">Docs</span>
+            <span className="text-muted-foreground">docs</span>
           </nav>
-          {title && <h1 className="text-4xl font-bold tracking-tight mb-3">{title}</h1>}
+          {title && <h1 className="font-display text-4xl font-bold tracking-tight mb-3 text-glow">{title}</h1>}
           {description && <p className="text-lg text-muted-foreground mb-8">{description}</p>}
           <div className="prose-docs">{children}</div>
 
           {/* Prev/Next */}
           <div className="mt-12 pt-8 border-t border-border grid grid-cols-2 gap-4">
-            <Link to="/docs" className="rounded-xl border border-border bg-card p-4 hover:border-primary/30 transition">
-              <p className="text-xs text-muted-foreground mb-1">← Previous</p>
+            <Link to="/docs" className="rounded-xl border border-border bg-card hover:border-primary/30 transition p-4">
+              <p className="label-mono mb-1">← Previous</p>
               <p className="font-medium text-foreground text-sm">Introduction</p>
             </Link>
-            <Link to="/docs" className="rounded-xl border border-border bg-card p-4 hover:border-primary/30 transition text-right">
-              <p className="text-xs text-muted-foreground mb-1">Next →</p>
+            <Link to="/docs" className="rounded-xl border border-border bg-card hover:border-primary/30 transition p-4 text-right">
+              <p className="label-mono mb-1">Next →</p>
               <p className="font-medium text-foreground text-sm">Browsing</p>
             </Link>
           </div>
@@ -115,7 +116,7 @@ export default function DocsLayout({ children, title, description, toc }) {
         {toc && toc.length > 0 && (
           <aside className="hidden lg:block">
             <div className="sticky top-24">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground/50 font-semibold mb-3">On this page</p>
+              <p className="label-mono mb-3">On this page</p>
               <nav className="space-y-1.5 border-l border-border pl-3">
                 {toc.map((t) => (
                   <a key={t.id} href={`#${t.id}`} className="block text-sm text-muted-foreground hover:text-primary transition">{t.label}</a>

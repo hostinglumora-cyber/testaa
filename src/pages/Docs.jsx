@@ -2,14 +2,15 @@ import React from "react";
 import DocsLayout from "@/components/DocsLayout";
 import { ArrowRight, ShieldCheck, Package, Boxes, Gift, Code2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BRAND } from "@/lib/brand";
 
 export default function Docs() {
   return (
     <DocsLayout
       title="Quickstart"
-      description="Get up and running with Siren in minutes. List, sell, and buy ER:LC assets securely."
+      description={`Launch into ${BRAND.name} in minutes. List, sell, and buy ER:LC assets — secured end to end.`}
       toc={[
-        { id: "intro", label: "What is Siren?" },
+        { id: "intro", label: `What is ${BRAND.name}?` },
         { id: "marketplace", label: "Browsing the marketplace" },
         { id: "selling", label: "Selling your first asset" },
         { id: "types", label: "Listing types" },
@@ -17,8 +18,8 @@ export default function Docs() {
       ]}
     >
       <section id="intro" className="scroll-mt-24 mb-10">
-        <h2>What is Siren?</h2>
-        <p>Siren is the trusted marketplace for ER:LC (Emergency Response: Liberty County) community assets — liveries, uniforms, ELS configurations, map templates, and bundles. Every listing is tagged by department, and every transaction is scam-protected.</p>
+        <h2>What is {BRAND.name}?</h2>
+        <p>{BRAND.name} is the trusted marketplace for ER:LC (Emergency Response: Liberty County) community assets — liveries, uniforms, ELS configurations, map templates, and bundles. Every listing is tagged by department, and every transaction is scam-protected.</p>
       </section>
 
       <section id="marketplace" className="scroll-mt-24 mb-10">
